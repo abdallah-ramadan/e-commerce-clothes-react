@@ -6,6 +6,15 @@ const initialState = {
   amounts: 0
 };
 
+if(JSON.parse(localStorage.getItem("cart-products"))){
+const cartProducts =JSON.parse(localStorage.getItem("cart-products"))
+initialState.cartItems = cartProducts
+for(let i =0;i< cartProducts.length; i++){
+  initialState.amounts += cartProducts[i].amount
+  initialState.total += cartProducts[i].price * cartProducts[i].amount
+}
+}
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -20,9 +29,11 @@ const cartSlice = createSlice({
       if (existingIndex >= 0) {
         state.cartItems[existingIndex].amount += 1;
         state.amounts += 1
+        localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
       } else {
         state.cartItems.push({ ...action.payload, amount: 1 });
         state.amounts += 1
+        localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
       }
     
       state.total += price;
@@ -33,6 +44,7 @@ const cartSlice = createSlice({
       state.cartItems = state.cartItems.filter(
         item => !(item._id === _id && item.size === size)
       );
+      localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
       state.total -= amount * price
       state.amounts -= amount
     },
@@ -47,9 +59,12 @@ const cartSlice = createSlice({
       if (index !== -1) {
         if (state.cartItems[index].amount > 1) {
           state.cartItems[index].amount -= 1;
+          localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
+
           state.amounts -= 1
         } else {
           state.cartItems.splice(index, 1);
+          localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
           state.amounts -= amount
         }
         state.total -= price ;
@@ -65,12 +80,14 @@ const cartSlice = createSlice({
     
       if (index !== -1) {
         state.cartItems[index].amount += 1;
+        localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
         state.total += price;
         state.amounts += 1
       }
     },    
     clearCart: state => {
       state.cartItems = [];
+      localStorage.setItem("cart-products", JSON.stringify(state.cartItems))
       state.total = 0
       state.amounts = 0
     }

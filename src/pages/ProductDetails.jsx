@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../redux/Cart/CartSlice'
+import { toast } from 'react-toastify'
 
 
 const ProductDetails = () => {
@@ -27,10 +28,11 @@ const ProductDetails = () => {
 
   const handelAddToCart = () => {
     if (!size) {
-      alert("Please select a size before adding to cart.");
+      toast.error("Please select a size before adding to cart.");
       return;
     }
     dispatch(addToCart({ ...product, size: size }));
+    toast.success(`${product.name} added to cart!`);
   }
 
 
@@ -40,36 +42,38 @@ const ProductDetails = () => {
     <div>
       <div className='border-t-2 border-gray-200 pt-10 transition-opacity ease-in duration-500 opacity-100'>
         <div className='flex gap-12 flex-col sm:flex-row'>
-          <div className="flex-1 flex flex-col-reverse md:flex-row gap-6">
-            {/* Thumbnails */}
-            <div className="flex flex-row md:max-w-20 md:flex-col justify-between md:justify-start gap-2 md:gap-4">
-              {Array.isArray(product?.image) ? (
-                product.image.map((ele) => (
-                  <img
-                    src={ele}
-                    key={ele}
-                    alt=""
-                    onClick={() => setSelectedImage(ele)}
-                    className={`w-1/5 md:w-full aspect-square object-cover cursor-pointer border ${selectedImage === ele ? "border-black" : "border-gray-200"}`}
-                  />
-                ))
-              ) : (
-                <img
-                  src={product?.image}
-                  alt=""
-                  onClick={() => setSelectedImage(product.image)}
-                  className="w-1/5 md:w-full aspect-square object-cover cursor-pointer border border-gray-200"
-                />
-              )}
-            </div>
+          <div className=' mb-auto flex flex-1'>
+            <div className="flex-1 flex flex-col-reverse md:flex-row gap-6">
 
-            {/* Main Image */}
-            <div className="w-full">
-              <img
-                src={selectedImage}
-                alt="Main product"
-                className="w-full object-cover rounded-md shadow"
-              />
+              <div className="flex flex-row md:max-w-20 md:flex-col justify-between md:justify-start gap-2 md:gap-4">
+                {Array.isArray(product?.image) ? (
+                  product.image.map((ele) => (
+                    <img
+                      src={ele}
+                      key={ele}
+                      alt=""
+                      onClick={() => setSelectedImage(ele)}
+                      className={`w-1/5 md:w-full aspect-square object-cover cursor-pointer border ${selectedImage === ele ? "border-black" : "border-gray-200"}`}
+                    />
+                  ))
+                ) : (
+                  <img
+                    src={product?.image}
+                    alt=""
+                    onClick={() => setSelectedImage(product.image)}
+                    className="w-1/5 md:w-full aspect-square object-cover cursor-pointer border border-gray-200"
+                  />
+                )}
+              </div>
+
+              {/* Main Image */}
+              <div className="w-full">
+                <img
+                  src={selectedImage}
+                  alt="Main product"
+                  className="w-full object-cover rounded-md shadow"
+                />
+              </div>
             </div>
           </div>
 
