@@ -12,6 +12,7 @@ import Orders from './pages/Orders'
 import NavBar from './components/NavBar'
 import Contact from './pages/Contact'
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
